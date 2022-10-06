@@ -7,6 +7,7 @@ from taxas_imi import portugal, gondomar
 import streamlit as st
 
 
+
 st.markdown("""
     # POUPAR NO IMI
 
@@ -38,17 +39,21 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+
 st.markdown('<p class="big-font">Esta ferramenta foi criada para ajudar os \
         proprietários de imóveis \
         urbanos em Portugal perceber se podem baixar o valor do seu Imposto \
         Municipal sobre Imóveis (IMI). É uma ferramenta experimental e alheia \
         à Autoridade Tributária (AT), não sendo eventuais diferenças da \
         responsabilidade do seu criador e não está dispensa a consulta do \
-        [Simulador de IMI](https://zonamentopf.portaldasfinancas.gov.pt/simulador/default.jsp) \
-        oficial. Não obstante, os resultados aqui obtidos são uma análise \
+        <a href="https://zonamentopf.portaldasfinancas.gov.pt/simulador/default.jsp">Simulador de IMI</a> \
+        oficial. A AT revê periodicamente alguns parâmetros de cálculo, como \
+        o Coeficiente de Localização, pelo que estes poderão não coincidir \
+        com a informação constante na CPU. Não obstante, os resultados aqui \
+        obtidos são uma análise \
         preliminar importante, que podem encaminhar os cidadãos para uma \
         poupança significativa. Ao seleccionar esta caixa, declaro que \
-        tomei conhecimento deste alerta.</p>', unsafe_allow_html=True)
+        tomei conhecimento deste alerta. </p>', unsafe_allow_html=True)
 
 
 condicoes = 0
