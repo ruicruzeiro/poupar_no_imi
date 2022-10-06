@@ -1,6 +1,5 @@
 import regex
 import datetime as dt
-from dateutil.relativedelta import relativedelta
 
 
 
@@ -24,6 +23,7 @@ def get_data_avaliacao(text):
     data_avaliacao = data_avaliacao[0].split()[0]
     data_avaliacao = dt.datetime.strptime(data_avaliacao, '%Y/%m/%d')
     data_avaliacao = data_avaliacao.date()
+    return data_avaliacao
 
 def get_param_calc(text, ano_inscricao):
     ext_calc = regex.findall('(?<=Vc x A x Ca x Cl x Cq x Cv )(.*)(?= Vt = valor patrimonial tributário)', text)
