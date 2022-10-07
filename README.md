@@ -8,3 +8,5 @@ and will tell him if he can ask for an appraisal by the Tax Department and, if s
 will be saved on taxes.
 
 Check out the app here: https://poupar-no-imi.onrender.com
+
+Last updated on 7 Oct 2022
