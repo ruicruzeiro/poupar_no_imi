@@ -82,82 +82,84 @@ if st.button('Saiba se pode poupar!'):
 
     else:
 
-        reader = PdfReader(uploaded_file)
+        with st.spinner(text="Analisando o ficheiro..."):
 
-        # extrair conteúdo do PDF com PyPDF2
+            reader = PdfReader(uploaded_file)
 
-        text = [reader.pages[page].extract_text() for page in range(len(reader.pages))]
-        text = ' '.join(text)
-        text = text.replace('\n','')
+            # extrair conteúdo do PDF com PyPDF2
 
-        if 'CADERNETA PREDIAL URBANA' and 'SERVIÇO DE FINANÇAS' and \
-            'DADOS DE AVALIAÇÃO' in text:
+            text = [reader.pages[page].extract_text() for page in range(len(reader.pages))]
+            text = ' '.join(text)
+            text = text.replace('\n','')
 
-            # extrair parâmetros individuais do conteúdo
+            if 'CADERNETA PREDIAL URBANA' and 'SERVIÇO DE FINANÇAS' and \
+                'DADOS DE AVALIAÇÃO' in text:
 
-            distrito_concelho, distrito_concelho_freguesia = l.get_codigo_do_local(text)
-            ano_inscricao = l.get_ano_inscricao(text)
-            data_avaliacao = l.get_data_avaliacao(text)
-            VPT_existente, VPT_novo = l.get_param_calc(text, ano_inscricao)
+                # extrair parâmetros individuais do conteúdo
+
+                distrito_concelho, distrito_concelho_freguesia = l.get_codigo_do_local(text)
+                ano_inscricao = l.get_ano_inscricao(text)
+                data_avaliacao = l.get_data_avaliacao(text)
+                VPT_existente, VPT_novo = l.get_param_calc(text, ano_inscricao)
 
 
-            ### analisar resultados ###
+                ### analisar resultados ###
 
-            # ainda não passaram 3 anos após a última avaliação
+                # ainda não passaram 3 anos após a última avaliação
 
-            if data_avaliacao + relativedelta(years=3) > dt.date.today():
+                if data_avaliacao + relativedelta(years=3) > dt.date.today():
 
-                st.info('Ainda não é possível pedir uma reavaliação.')
-                st.write('A última reavaliação deste imóvel foi feita em ' \
-                    + str(data_avaliacao) + '. A Autoridade Tributária impõe um \
-                    período mínimo de 3 anos entre reavaliações. Para saber se \
-                    pode poupar no IMI, volte a esta ferramenta no fim desse \
-                    prazo, uma vez que vários parâmetros de cálculo podem ser \
-                    alterados pela Autoridade Tributária até lá.')
+                    st.info('Ainda não é possível pedir uma reavaliação.')
+                    st.write('A última reavaliação deste imóvel foi feita em ' \
+                        + str(data_avaliacao) + '. A Autoridade Tributária impõe um \
+                        período mínimo de 3 anos entre reavaliações. Para saber se \
+                        pode poupar no IMI, volte a esta ferramenta no fim desse \
+                        prazo, uma vez que vários parâmetros de cálculo podem ser \
+                        alterados pela Autoridade Tributária até lá.')
 
-            # já passaram 3 anos mas o valor patrimonial subiu
+                # já passaram 3 anos mas o valor patrimonial subiu
 
-            elif VPT_novo > VPT_existente:
+                elif VPT_novo > VPT_existente:
 
-                st.warning('Não é aconselhável pedir já uma reavaliação.')
-                st.write('Uma reavaliação pedida neste momento irá fazer subir o \
-                        Valor Patrimonial do imóvel para ' + str(int(VPT_novo)) + ' €. \
-                        Esta situação poderá dever-se à subida de alguns dos \
-                        parâmetros de cálculo pela Autoridade Tributária.')
+                    st.warning('Não é aconselhável pedir já uma reavaliação.')
+                    st.write('Uma reavaliação pedida neste momento irá fazer subir o \
+                            Valor Patrimonial do imóvel para ' + str(int(VPT_novo)) + ' €. \
+                            Esta situação poderá dever-se à subida de alguns dos \
+                            parâmetros de cálculo pela Autoridade Tributária.')
 
-            # já passaram 3 anos e pode haver poupança
+                # já passaram 3 anos e pode haver poupança
 
-            elif VPT_novo <= VPT_existente:
+                elif VPT_novo <= VPT_existente:
 
-                # Gondomar é o único concelho com taxas diferentes em algumas
-                # freguesias
+                    # Gondomar é o único concelho com taxas diferentes em algumas
+                    # freguesias
 
-                if distrito_concelho == '1304':
-                    taxa_concelho = gondomar[distrito_concelho_freguesia]
-                else:
-                    taxa_concelho = portugal[distrito_concelho]
+                    if distrito_concelho == '1304':
+                        taxa_concelho = gondomar[distrito_concelho_freguesia]
+                    else:
+                        taxa_concelho = portugal[distrito_concelho]
 
-                IMI_existente = int(round(VPT_existente * taxa_concelho, 0))
-                IMI_novo = int(round(VPT_novo * taxa_concelho, 0))
+                    IMI_existente = int(round(VPT_existente * taxa_concelho, 0))
+                    IMI_novo = int(round(VPT_novo * taxa_concelho, 0))
 
-                if IMI_novo <= IMI_existente - 10:
+                    if IMI_novo <= IMI_existente - 10:
 
-                    st.success('Você pode passar a pagar menos IMI!')
-                    st.write('Caso peça uma reavaliação à Autoridade Tributária, \
-                        o Valor Patrimonial do imóvel passará a ser de ' + \
-                        str(int(VPT_novo)) + ' € e o valor do IMI anual a \
-                        pagar de ' + str(IMI_novo) + " €.")
-                    st.write('Com a taxa de ' + str(dt.date.today().year) + ', \
-                        a poupança anual de IMI neste imóvel é de ' + \
-                        str(int(round(IMI_existente - IMI_novo, 0))) + ' €!')
+                        st.success('Você pode passar a pagar menos IMI!')
+                        st.write('Caso peça uma reavaliação à Autoridade Tributária, \
+                            o Valor Patrimonial do imóvel passará a ser de ' + \
+                            str(int(VPT_novo)) + ' € e o valor do IMI anual a \
+                            pagar de ' + str(IMI_novo) + " €.")
+                        st.write('Com a taxa de ' + str(dt.date.today().year) + ', \
+                            a poupança anual de IMI neste imóvel é de ' + \
+                            str(int(round(IMI_existente - IMI_novo, 0))) + ' €!')
 
-                # não há poupança ou esta é inferior a 10 €.
+                    # não há poupança ou esta é inferior a 10 €.
 
-                else:
+                    else:
 
-                    st.info('Uma reavaliação irá resultar numa poupança anual \
-                        no IMI do imóvel inferior a 10 €.')
+                        st.info('Uma reavaliação irá resultar numa poupança anual \
+                            no IMI do imóvel inferior a 10 €.')
 
-        else:
+            else:
 
-            st.error('Esta ferramenta só aceita Cadernetas Prediais Urbanas.')
+                st.error('Esta ferramenta só aceita Cadernetas Prediais Urbanas.')
