@@ -8,6 +8,14 @@ import streamlit as st
 from PIL import Image
 
 image = Image.open('casa.jpg')
+icon = Image.open('casa_icon.jpg')
+
+st.set_page_config(
+    page_title='Poupar no IMI',
+    page_icon=icon,
+    layout="centered",
+    initial_sidebar_state="auto",
+    menu_items=None)
 
 col1, col2 = st.columns(2)
 
