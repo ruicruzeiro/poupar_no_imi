@@ -149,8 +149,9 @@ if st.button('Saiba se pode poupar!'):
 
                     IMI_existente = int(round(VPT_existente * taxa_concelho, 0))
                     IMI_novo = int(round(VPT_novo * taxa_concelho, 0))
+                    IMI_poupanca = IMI_existente - IMI_novo
 
-                    if IMI_novo <= IMI_existente - 10:
+                    if IMI_poupanca >= 10:
 
                         st.success('Você pode passar a pagar menos IMI!')
                         st.write('Caso peça uma reavaliação à Autoridade Tributária, \
@@ -159,14 +160,21 @@ if st.button('Saiba se pode poupar!'):
                             pagar de ' + str(IMI_novo) + " €.")
                         st.write('Com a taxa de ' + str(dt.date.today().year) + ', \
                             a poupança anual de IMI neste imóvel é de ' + \
-                            str(int(round(IMI_existente - IMI_novo, 0))) + ' €!')
+                            str(int(round(IMI_poupanca, 0))) + ' €!')
 
                     # não há poupança ou esta é inferior a 10 €.
 
                     else:
 
-                        st.info('Uma reavaliação irá resultar numa poupança anual \
-                            no IMI do imóvel inferior a 10 €.')
+                        IMI_poupanca_peq = '{:.2f}'.format(round(VPT_existente \
+                            * taxa_concelho, 2) - round(VPT_novo * taxa_concelho, 2))
+                        st.info('Pode pagar menos, mas pode não compensar.')
+                        st.write('Uma reavaliação irá resultar numa poupança anual \
+                            no IMI do imóvel de ' + IMI_poupanca_peq + ' €. \
+                            Recordamos que as reavaliações só podem ser pedidas \
+                            de 3 em 3 anos, pelo que deve analisar se esta é a \
+                            melhor opção para si. Consulte o seu Serviço de \
+                            Finanças.')
 
             else:
 
