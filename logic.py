@@ -63,8 +63,4 @@ def get_param_calc(text, ano_inscricao):
     elif idade > 60:
         Cv = 0.4
 
-    # calcular o novo VPT
-
-    VPT_novo = round(Vc * A * Ca * Cl * Cq * Cv, 2)
-
-    return VPT_existente, VPT_novo
+    return VPT_existente, Vc, A, Ca, Cl, Cq, Cv

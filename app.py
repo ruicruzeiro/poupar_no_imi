@@ -27,22 +27,16 @@ with col1:
 
     """)
 
-    st.write('Carregue aqui a sua Caderneta Predial e descubra se pode \
-        poupar no IMI do seu imóvel pedindo a sua reavaliação à Autoridade \
-        Tributária. Esta deverá ser em formato PDF e ter boa qualidade (deve \
-        conseguir seleccionar palavras com um duplo clique). Pode obter o PDF \
-        no Portal das Finanças.')
+    st.markdown("""
+        ### Carregue aqui a sua Caderneta Predial e descubra!
+    """)
+
     st.text('')
 
 with col2:
     st.text('')
     st.image(image)
 
-
-# carregar PDF
-
-st.set_option('deprecation.showfileUploaderEncoding', False)
-uploaded_file = st.file_uploader("Carregue aqui a sua Caderneta Predial:", type="pdf")
 
 # disclaimer
 
@@ -54,61 +48,70 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown('<p class="small-font">A Caderneta Predial a carregar deverá estar \
+        em formato PDF e permitir seleccionar palavras com um duplo clique. \
+        Pode obter o documento no Portal das das Finanças. Não guardaremos \
+        qualquer ficheiro.', unsafe_allow_html=True)
 
-st.markdown('<p class="small-font">Não guardaremos qualquer ficheiro. Esta \
-        ferramenta foi criada para ajudar os proprietários de imóveis \
-        urbanos em Portugal perceber se podem baixar o valor do seu Imposto \
-        Municipal sobre Imóveis (IMI). É uma ferramenta experimental e alheia \
-        à Autoridade Tributária (AT), não sendo eventuais diferenças da \
-        responsabilidade do seu criador e não está dispensada a consulta do \
-        <a href="https://zonamentopf.portaldasfinancas.gov.pt/simulador/default.jsp">Simulador de IMI</a> \
+st.markdown('<p class="small-font">Esta aplicação foi criada para indicar \
+        possíveis poupanças de Imposto Municipal sobre Imóveis (IMI) aos \
+        proprietários de imóveis urbanos em Portugal. É uma ferramenta \
+        experimental e alheia à Autoridade Tributária (AT), não sendo o seu \
+        criador responsável por eventuais diferenças no resultado. Estas \
+        diferenças poderão ter origem em Cadernetas Prediais com informação \
+        desatualizada, regimes especiais de alguns municípios para determinadas \
+        zonas, ou atributos do agregado familiar, entre outras. Não dispensa a \
+        consulta do <a href="https://zonamentopf.portaldasfinancas.gov.pt/simulador/default.jsp">Simulador de IMI</a> \
         oficial. </p>', unsafe_allow_html=True)
 
-st.markdown('<p class="small-font">As eventuais diferenças poderão ter origem \
-        na revisão de alguns parâmetros de cálculo pela AT, como o Coeficiente \
-        de Localização, pelo que poderá haver diferenças entre os parâmetros \
-        reais e os registados na sua Caderneta Predial. Exemplos disso \
-        são alguns regimes especiais de municípios para determinadas zonas \
-        e o número de dependentes do agregado familiar. </p>', unsafe_allow_html=True)
+st.markdown('<p class="small-font">Ao carregar a sua Caderneta Predial, \
+        está a declar que tomou conhecimento destes alertas. </p>', unsafe_allow_html=True)
 
-st.markdown('<p class="small-font">Não obstante, os resultados aqui \
-        obtidos são uma análise preliminar importante, que podem encaminhar o \
-        cidadão para uma poupança significativa. Ao seleccionar esta caixa, \
-        declaro que tomei conhecimento destes alertas. </p>', unsafe_allow_html=True)
+st.text('')
+st.text('')
 
+# carregar PDF
 
-condicoes = 0
+st.set_option('deprecation.showfileUploaderEncoding', False)
+uploaded_file = st.file_uploader("Carregue aqui a sua Caderneta Predial:", type="pdf")
 
-if st.checkbox('Concordo com as condições acima.') and uploaded_file is not None:
-    condicoes = 1
+st.text('')
+st.text('')
 
+if uploaded_file:
 
-if st.button('Saiba se pode poupar!'):
+    with st.spinner(text="Analisando o ficheiro..."):
 
-    if condicoes == 0:
-        st.write('Por favor, carregue um PDF e aceite as condições.')
+        reader = PdfReader(uploaded_file)
 
-    else:
+        # extrair conteúdo do PDF com PyPDF2
 
-        with st.spinner(text="Analisando o ficheiro..."):
+        text = [reader.pages[page].extract_text() for page in range(len(reader.pages))]
+        text = ' '.join(text)
+        text = text.replace('\n','')
 
-            reader = PdfReader(uploaded_file)
+        if 'CADERNETA PREDIAL URBANA' and 'SERVIÇO DE FINANÇAS' and \
+            'DADOS DE AVALIAÇÃO' in text:
 
-            # extrair conteúdo do PDF com PyPDF2
+            # extrair parâmetros individuais do conteúdo
 
-            text = [reader.pages[page].extract_text() for page in range(len(reader.pages))]
-            text = ' '.join(text)
-            text = text.replace('\n','')
+            distrito_concelho, distrito_concelho_freguesia = l.get_codigo_do_local(text)
+            ano_inscricao = l.get_ano_inscricao(text)
+            data_avaliacao = l.get_data_avaliacao(text)
+            VPT_existente, Vc, A, Ca, Cl, Cq, Cv = l.get_param_calc(text, ano_inscricao)
 
-            if 'CADERNETA PREDIAL URBANA' and 'SERVIÇO DE FINANÇAS' and \
-                'DADOS DE AVALIAÇÃO' in text:
+            st.markdown('<p class="small-font">O seu documento contém o \
+                Coeficiente de localização abaixo. Este é alterado \
+                a cada 3 anos. Pode verificar no <a href="https://zonamentopf.portaldasfinancas.gov.pt/simulador/default.jsp"> \
+                Simulador da AT</a> se é o atual.</p>', unsafe_allow_html=True)
 
-                # extrair parâmetros individuais do conteúdo
+            Cl_verif = st.number_input('Coeficiente de Localização', min_value=0.4, max_value=3.5, value=Cl, label_visibility="collapsed")
 
-                distrito_concelho, distrito_concelho_freguesia = l.get_codigo_do_local(text)
-                ano_inscricao = l.get_ano_inscricao(text)
-                data_avaliacao = l.get_data_avaliacao(text)
-                VPT_existente, VPT_novo = l.get_param_calc(text, ano_inscricao)
+            if st.button('Confirmar Coeficiente de Localização'):
+
+                # calcular VPT novo
+
+                VPT_novo = round(Vc * A * Ca * Cl_verif * Cq * Cv, 2)
 
 
                 ### analisar resultados ###
@@ -176,6 +179,6 @@ if st.button('Saiba se pode poupar!'):
                             melhor opção para si. Consulte o seu Serviço de \
                             Finanças.')
 
-            else:
+        else:
 
-                st.error('Esta ferramenta só aceita Cadernetas Prediais Urbanas.')
+            st.error('Esta ferramenta só aceita Cadernetas Prediais Urbanas.')
