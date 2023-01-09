@@ -33,7 +33,7 @@ def get_param_calc(text, ano_inscricao):
 
     # valor de construção em 2022 (última actualização deste código)
 
-    Vc = 640.00
+    Vc = 665.00 # Valor em 2022: 640; actualizado em 2023
 
     # extrair coeficientes da CPU
 
