@@ -60,7 +60,7 @@ st.markdown('<p class="small-font">Esta aplicação foi criada para indicar \
         criador responsável por eventuais diferenças no resultado. Estas \
         diferenças poderão ter origem em Cadernetas Prediais com informação \
         desatualizada, regimes especiais de alguns municípios para determinadas \
-        zonas, ou atributos do agregado familiar, entre outras. Não dispensa a \
+        zonas, ou dependentes do agregado familiar, entre outras. Não dispensa a \
         consulta do <a href="https://zonamentopf.portaldasfinancas.gov.pt/simulador/default.jsp">Simulador de IMI</a> \
         oficial. </p>', unsafe_allow_html=True)
 
