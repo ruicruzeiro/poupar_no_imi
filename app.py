@@ -67,6 +67,9 @@ st.markdown('<p class="small-font">Esta aplicação foi criada para indicar \
 st.markdown('<p class="small-font">Ao carregar a sua Caderneta Predial, \
         está a declar que tomou conhecimento destes alertas. </p>', unsafe_allow_html=True)
 
+st.markdown('<p class="small-font">Última actualização: 26-07-2024: actualizadas \
+    as taxas de IMI de 2023 (referentes aos pagamentos de 2024). </p>', unsafe_allow_html=True)
+
 st.text('')
 st.text('')
 

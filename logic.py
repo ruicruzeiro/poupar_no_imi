@@ -32,9 +32,9 @@ def get_param_calc(text, ano_inscricao):
     ext_calc = regex.findall('(?<=Vc x A x Ca x Cl x Cq x Cv )(.*)(?= Vt = valor patrimonial tributário)', text)
     ext_calc = ext_calc[0].split()
 
-    # valor de construção em 2022 (última actualização deste código)
+    # valor de construção em 26-07-2024 (última actualização deste código)
 
-    Vc = 665.00 # Valor em 2022: 640; actualizado em 2023
+    Vc = 665.00 # Valor em 2022: 640; actualizado em 2023, mantido em 2024
 
     # extrair coeficientes da CPU
 
