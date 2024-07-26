@@ -9,4 +9,4 @@ will be saved on taxes.
 
 Check out the app here: https://poupar-no-imi.onrender.com
 
-Last updated on 7 Oct 2022
+Last updated on 26 July 2024
