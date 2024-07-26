@@ -27,7 +27,6 @@ portugal = {
     '0104' : 0.003,
     '0105' : 0.0035, # Aveiro; desceu em 2024
     '0106' : 0.003,
-    '0107' : 0.0039,
     '0108' : 0.0035,
     '0110' : 0.0031, # Ílhavo; desceu em 2023 e em 2024
     '0111' : 0.003,
@@ -326,8 +325,6 @@ portugal = {
     }
 
 
-
-
 gondomar = {
     '130401' : 0.00343,    # Covelo; desceu em 2024
     '130402' : 0.0039,     # Fânzeres; desceu em 2024
@@ -348,10 +345,12 @@ gondomar = {
 }
 
 
-espinho ={
-    'anta e guetim' : 0.0038,
-    'espinho': 0.0038,
-    'paramos': 0.0035,
-    'silvalde': 0.0038
+espinho = {
+    '010701' : 0.0038,     # Anta (extinta)
+    '010702' : 0.0038,     # Espinho
+    '010702' : 0.0038,     # Guetim (extinta)
+    '010704' : 0.0035,     # Paramos
+    '010705' : 0.0038,     # Silvalde
+    '010706' : 0.0038      # Anta e Guetim
 
 }

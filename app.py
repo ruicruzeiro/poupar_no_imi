@@ -3,7 +3,7 @@ import os
 import datetime as dt
 from dateutil.relativedelta import relativedelta
 import logic as l
-from taxas_imi import portugal, gondomar
+from taxas_imi import portugal, gondomar, espinho
 import streamlit as st
 from PIL import Image
 
@@ -142,11 +142,13 @@ if uploaded_file:
 
                 elif VPT_novo <= VPT_existente:
 
-                    # Gondomar é o único concelho com taxas diferentes em algumas
-                    # freguesias
+                    # em 2024, Gondomar e Espinho são os únicos concelhos com
+                    # taxas diferentes em algumas freguesias
 
                     if distrito_concelho == '1304':
                         taxa_concelho = gondomar[distrito_concelho_freguesia]
+                    elif distrito_concelho == '0107':
+                        taxa_concelho = espinho[distrito_concelho_freguesia]
                     else:
                         taxa_concelho = portugal[distrito_concelho]
 
