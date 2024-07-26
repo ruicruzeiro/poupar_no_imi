@@ -26,10 +26,11 @@ def get_data_avaliacao(text):
     return data_avaliacao
 
 def get_param_calc(text, ano_inscricao):
+    ext_vpt = regex.findall('Valor patrimonial actual \(CIMI\):\s*€([\d,.]+)', text)
+    VPT_existente = float(ext_vpt[0].replace('.', '').replace(',', '.'))
+
     ext_calc = regex.findall('(?<=Vc x A x Ca x Cl x Cq x Cv )(.*)(?= Vt = valor patrimonial tributário)', text)
     ext_calc = ext_calc[0].split()
-
-    VPT_existente = float(ext_calc[0].replace('.', '').replace(',', '.'))
 
     # valor de construção em 2022 (última actualização deste código)
 
